@@ -1,7 +1,8 @@
 SeleniumCommands
 ================
+#####*An add-on to Selenium 2 to make test automation quicker and easier.* 
 
-An add-on to Selenium 2 to make test automation quicker and easier. 
+##Why did I start this project?
 
 I've been working with Selenium for some time now, and no matter which project I'm on I find myself 
 rewriting the same common functions. I'd say 90% of the webpages I test have some sort of AJAX or Javascript 

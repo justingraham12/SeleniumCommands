@@ -75,3 +75,9 @@ SeleniumCommands commands = new Commands(new FirefoxDriver())
   .WaitForTime(5, TimeUnit.SECONDS)
   .Close();
 ```
+
+##Current functions and usage types
+
+Search types: ID, CSS, XPath
+
+Functions: Open, Close, Click, Type, ComboBoxText, WaitForElement, GetElement, GetElements, GetElementCount

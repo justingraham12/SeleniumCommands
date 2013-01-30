@@ -58,3 +58,20 @@ WebElement element = wait.until(new Function<WebDriver, WebElement>(){
   }
 });
 ```
+
+This project wraps all calls to driver.findElement() in FluentWaits to stop the random failing of interacting with 
+WebElements. I've followed the same structure as Selenium so the setup should be very similiar.
+
+The basic usage looks like this:
+
+```java
+/* SeleniumCommands */
+SeleniumCommands commands = new Commands(new FirefoxDriver())
+  .Open("http://www.github.com")
+  .Click(Using.CSS(".search>a"))
+  .Type("SeleniumCommands", Using.XPath("//*[@name='q']"))
+  .Click(Using.XPath("//*[@type='submit']"))
+  .Click(Using.XPath("//a[contains(text(), 'SeleniumCommands')]"))
+  .WaitForTime(5, TimeUnit.SECONDS)
+  .Close();
+```

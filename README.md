@@ -4,32 +4,32 @@ SeleniumCommands
 
 ##Why did I start this project?
 
-I've been working with Selenium for some time now, and no matter which project I'm on I find myself 
-rewriting the same common functions. I'd say 90% of the webpages I test have some sort of AJAX or Javascript 
-loading elements milliseconds after the page loads. If you call the following:
+1. Issues around handling elements when AJAX is present
+2. Issues with pathing to elements that have a duplicate hidden element
+3. Ease of use setting up test cases
+4. Hastle of writing the same error handling for every project I start using Selenium
 
+
+####Issues with Wait when AJAX is present
+
+######No Wait
 ```java
-/** No Wait */
 WebElement element = driver.findElement(By.loc(""));
 ```
+Causes Selenium to throw false NoSuchElementExceptions due to elements loading milliseconds after
+the page. Selenium is unable to follow the JS let alone anything server side. Thus we end up with errors
+where the page has completely loaded (according to Selenium) but our elements are not yet available.  
 
-it causes Selenium to throw the classic NoSuchElementException which inturn fails your test cases. 
-The solution to this is to add either an explicit or implicit wait before requesting an element. 
-In my experience implicit waits are unreliable not to mention not supported by all WebDriver instances 
-(NOTE: Last time I tested implicit waits was around 2.14 so this could very well be fixed). To set up an 
-implicit wait you'd do something like this:
-
+######Implicit Wait
 ```java
-/* Implicit Wait */
 driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 WebElement element = driver.findElement(By.loc(""));
 ```
+In theory this should fix any issues of calling WebElements without a wait. But unforchantly this isn't failsafe and not
+even cross browser compliant. (NOTE: Last time I tested implicit waits was in 2.14 so this could have been fixed). This 
+was by far the biggest issue. I could set up an implicit wait for IE but it wouldn't work in FF. 
 
-Once again it's been awhile since I've used this, but the last time I did I had my implicit wait set to 30 seconds
-and when my test environment was running slow the page would load and instantly I'd receive a NoSuchElementException.
-Obviously the inconsistencies were very frustrating. So I moved onto the next recommended option of explicit waits.
-The seleniumhq.org recommends you set up your explicit waits like this:
-
+######Explicit Wait
 ```java
 /* Explicit Wait */
 WebElement element = (new WebDriverWait(driver, 10))
@@ -40,11 +40,11 @@ WebElement element = (new WebDriverWait(driver, 10))
     }
   });
 ```
+Explicit waits work very well up until the point we want to start modifying the wait behavior. We can change the 
+conditions and how long we wait but how often does our wait poll for the element? Or What if we want to wait 5 seconds
+before ever looking for the element? The standard Explicit Wait doesn't seem to handle this functionality. 
 
-Now this example works really well up until we want to start making changes to how long we want our thread to sleep
-before searching for our element, or say we want it to only check if the element is available 2 times before throwing
-the exception? This is where the FluentWait object comes in very handy:
-
+######Fluent Wait
 ```java
 /* Fluent Wait */
 Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
@@ -62,7 +62,14 @@ WebElement element = wait.until(new Function<WebDriver, WebElement>(){
 This project wraps all calls to driver.findElement() in FluentWaits to stop the random failing of interacting with 
 WebElements. I've followed the same structure as Selenium so the setup should be very similiar.
 
-The basic usage looks like this:
+##Current functions and usage
+
+Search types: ID, CSS, XPath
+
+Functions: Open, Close, Click, Type, ComboBoxText, WaitForElement, GetElement, GetElements, GetElementCount
+
+
+In use:
 
 ```java
 /* SeleniumCommands */
@@ -75,9 +82,3 @@ SeleniumCommands commands = new Commands(new FirefoxDriver())
   .WaitForTime(5, TimeUnit.SECONDS)
   .Close();
 ```
-
-##Current functions and usage types
-
-Search types: ID, CSS, XPath
-
-Functions: Open, Close, Click, Type, ComboBoxText, WaitForElement, GetElement, GetElements, GetElementCount

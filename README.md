@@ -46,7 +46,6 @@ before ever looking for the element? The standard Explicit Wait doesn't seem to 
 
 ######Fluent Wait
 ```java
-/* Fluent Wait */
 Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
   .withTimeout(20, TimeUnit.SECONDS)
   .pollingEvery(2, TimeUnit.SECONDS)
@@ -58,9 +57,16 @@ WebElement element = wait.until(new Function<WebDriver, WebElement>(){
   }
 });
 ```
+Fluent waits are the most reliable wait time I've found in Selenium. This all calls through a SeleniumCommands object
+first run through a fluent wait. Initially the timeout is set to 15 seconds and polls every 1. After 15 seconds of not
+finding an element we assume the element is not going to load and throw the NoSuchElementException. You have full 
+control of the timeout and polling by calling the following.
 
-This project wraps all calls to driver.findElement() in FluentWaits to stop the random failing of interacting with 
-WebElements. I've followed the same structure as Selenium so the setup should be very similiar.
+```java
+SeleniumCommands commands = new Commands(new FirefoxDriver())
+  .SetFluentWaitTime(20, SECONDS, 500, MILLISECONDS);
+```
+Which sets the Timeout value to 20 seconds and the polling time to 500 milliseconds.
 
 ##Current functions and usage
 

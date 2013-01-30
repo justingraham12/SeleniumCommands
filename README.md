@@ -57,7 +57,7 @@ WebElement element = wait.until(new Function<WebDriver, WebElement>(){
   }
 });
 ```
-Fluent waits are the most reliable wait time I've found in Selenium. This all calls through a SeleniumCommands object
+Fluent waits are the most reliable wait time I've found in Selenium. Thus all calls through a SeleniumCommands object
 first run through a fluent wait. Initially the timeout is set to 15 seconds and polls every 1. After 15 seconds of not
 finding an element we assume the element is not going to load and throw the NoSuchElementException. You have full 
 control of the timeout and polling by calling the following.

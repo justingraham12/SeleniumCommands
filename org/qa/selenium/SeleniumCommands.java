@@ -14,13 +14,6 @@ import java.util.concurrent.TimeUnit;
  */
 public interface SeleniumCommands
 {
-
-	/*
-		TODO: Need to add logging for all commands. Note this is dependent upon Selenium updating the included TestNG
-		TODO: version to 6.9 (Current is 6.8). I've already submitted a bug to the Selenium dev's and they have it
-		TODO: marked as high priority as soon as 6.9 is out of beta.
-	*/
-
 	/**
 	 * Looks for any {@link WebElement}s using the given locator. Initially we start a FluentWait using
 	 * default times (unless overridden by {@link SeleniumCommands#SetFluentWaitTime(Integer,
@@ -72,5 +65,13 @@ public interface SeleniumCommands
 	public SeleniumCommands Open(String url);
 	public SeleniumCommands Close();
 	public SeleniumCommands PopWebFrame();
+
+	/**
+	 * Uses Javascript to find the unique XPath of the WebElement passed in. For this function to work
+	 * the WebElement passed into the function must be present in the current DOM.
+	 *
+	 * @param element the {@link WebElement} we want to XPath to
+	 * @return A valid unique XPath targeting the element
+	 */
 	public String GetElementXPath(WebElement element);
 }

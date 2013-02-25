@@ -1,6 +1,7 @@
 package org.qa.selenium;
 
 import com.google.common.base.Function;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.*;
@@ -564,6 +565,11 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	public SeleniumCommands Open(String url)
 	{
 		if (url == null) throw new NullPointerException("URL must not be Null");
+		UrlValidator validate = new UrlValidator(new String[]{"http", "https"});
+		if (!validate.isValid(url)) {
+			Close();
+			throw new IllegalArgumentException("Url '" + url + "' is invalid.");
+		}
 		driver.get(url);
 		return this;
 	}

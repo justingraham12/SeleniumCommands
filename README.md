@@ -2,6 +2,12 @@ SeleniumCommands
 ================
 #####*An add-on to Selenium 2 to make test automation quicker and easier.* 
 
+####Requirements
+You must have 'selenium' and 'log4j2' on your classpath for this project to work correctly.  
+1. [Selenium] (http://code.google.com/p/selenium/downloads/list)  
+2. [log4j2] (http://logging.apache.org/log4j/2.x/download.html)
+
+
 ##Why did I start this project?
 
 1. Issues around handling elements when AJAX is present

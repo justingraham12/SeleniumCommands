@@ -83,28 +83,75 @@ Locators: ID, CSS, XPath, WebElement
 
 Current Functions:  
 ```java 
-  .Open                 (String url)
-  .Close                ()
-  .SetFluentWaitTime    (int wait, TimeUnit waitUnit, int poll, TimeUnit pollUnit) 
-  .Click                (Using locator)
-  .ClickRandom          (Using locator)
-  .Type                 (String inputText, Using locator)
-  .ComboBoxByText       (String visibleText, Using locator)
-  .ComboBoxRandom       (Using locator)
-  .EnterWebFrame        (Using locator)
-  .PopCurrentWebFrame   ()
-  .PopAllWebFrames      ()
-  .WaitForElement       (Using locator)
-  .WaitForTime          (long time, TimeUnit unit)
-  .GetElement           (Using locator)
-  .GetElements          (Using locator)
-  .GetElementCount      (Using locator)
-  .GetElementAttribute  (String Attribute, Using locator)
-  .GetElementXPath      (WebElement element)
+  /** Opens the browser to the supplied url */
+  Open(String url)
+  
+  /** Closes the browser and the controlling WebDriver istance */
+  Close()
+  
+  /** Opens a new window and navigates to the input url */
+  OpenNewWindow(String url)
+  
+  /** Switches control to a popup/new window */
+  SwitchToWindow()
+  
+  /** Switches control back to the original/parent window */ 
+  SwitchToParent()
+  
+  /** Closes the current popup/new window */
+  CloseWindow()
+  
+  /** Sets the time to wait for WebElements and how often to look for them */
+  SetFluentWaitTime(int wait, TimeUnit waitUnit, int poll, TimeUnit pollUnit) 
+  
+  /** Clicks the WebElement at the locator */
+  Click(Using locator)
+  
+  /** If the locator finds more then 1 visible/clickable WebElement we choose a random to click */
+  ClickRandom(Using locator)
+  
+  /** Enters the inputText into the WebElement at the locator */
+  Type(String inputText, Using locator)
+  
+  /** Selects the visibleText from the <select> WebElement at the locator */
+  ComboBoxByText(String visibleText, Using locator)
+  
+  /** Chooses a random option from the <select> WebElement at the locator */
+  ComboBoxRandom(Using locator)
+  
+  /** Changes the drivers control the the WebFrame at the locator */
+  EnterWebFrame(Using locator)
+  
+  /** Changes the drivers control to the WebFrame directly above the current WebFrame */
+  PopCurrentWebFrame()
+  
+  /** Changes the drivers control to the default/top most WebFrame */
+  PopAllWebFrames()
+  
+  /** Wait's using the FluentWaitTime for the WebElement at the locator to exist */
+  WaitForElement(Using locator)
+  
+  /** Pauses all driver functions for the time supplied */
+  WaitForTime(long time, TimeUnit unit)
+  
+  /** Returns the WebElement found at the locator */
+  GetElement(Using locator)
+  
+  /** Returns a list of WebElement's found using the locator */
+  GetElements(Using locator)
+  
+  /** Returns the number of elements the locator found */
+  GetElementCount(Using locator)
+  
+  /** Returns the attribute value of the WebElement at the locator */
+  GetElementAttribute(String Attribute, Using locator)
+  
+  /** Returns the unique XPath of the WebElement */
+  GetElementXPath(WebElement element)
 ```
 
 
-In use:
+####SeleniumCommands In Use:
 
 ```java
 /* SeleniumCommands */

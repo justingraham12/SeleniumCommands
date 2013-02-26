@@ -16,6 +16,7 @@ import org.qa.selenium.internal.ByWebElement;
 import org.qa.selenium.internal.ByXPath;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -40,6 +41,9 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 
 	/** Hold the url of the page we last called a command on */
 	private String currentUrl;
+
+	/** Maintains the order in which we entered nested WebFrames */
+	private LinkedList<Using> webFrames = new LinkedList<Using>();
 
 	public Commands(WebDriver driver)
 	{
@@ -203,9 +207,20 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		return locator.GetElementAttribute(attribute, this);
 	}
 
+	@Override
+	public SeleniumCommands EnterWebFrame(Using locator)
+	{
+		setCurrentUrl();
+		setLastCommand("Enter Frame Using " + locator);
+		logger.info("Enter Frame Using " + locator);
+		webFrames.addFirst(locator);
+		locator.EnterWebFrame(this);
+		return this;
+	}
+
 	/*
-	 * CSS Functions
-	 */
+		 * CSS Functions
+		 */
 	@Override
 	public SeleniumCommands clickElementByCSS(String css)
 	{
@@ -287,9 +302,17 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		return element.getAttribute(attribute);
 	}
 
+	@Override
+	public SeleniumCommands enterWebFrameByCSS(String css)
+	{
+		WebElement element = fluentWaitForElementCss(css);
+		driver.switchTo().frame(element);
+		return this;
+	}
+
 	/*
-	 * ID Functions
-	 */
+		 * ID Functions
+		 */
 	@Override
 	public SeleniumCommands clickElementByID(String id)
 	{
@@ -371,9 +394,17 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		return element.getAttribute(attribute);
 	}
 
+	@Override
+	public SeleniumCommands enterWebFrameByID(String id)
+	{
+		WebElement element = fluentWaitForElementId(id);
+		driver.switchTo().frame(element);
+		return this;
+	}
+
 	/*
-	 * XPath Functions
-	 */
+		 * XPath Functions
+		 */
 	@Override
 	public SeleniumCommands clickElementByXPath(String xpath)
 	{
@@ -455,9 +486,17 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		return element.getAttribute(attribute);
 	}
 
+	@Override
+	public SeleniumCommands enterWebFrameByXPath(String xpath)
+	{
+		WebElement element = fluentWaitForElementXPath(xpath);
+		driver.switchTo().frame(element);
+		return this;
+	}
+
 	/*
-	 * WebElement Functions
-	 */
+		 * WebElement Functions
+		 */
 	@Override
 	public SeleniumCommands clickElementByWebElement(WebElement element)
 	{
@@ -529,9 +568,16 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		return element.getAttribute(attribute);
 	}
 
+	@Override
+	public SeleniumCommands enterWebFrameByWebElement(WebElement element)
+	{
+		driver.switchTo().frame(element);
+		return this;
+	}
+
 	/*
-	 * SeleniumCommand Functions
-	 */
+			 * SeleniumCommand Functions
+			 */
 	@Override
 	public SeleniumCommands SetFluentWaitTime(
 			Integer waitTime, TimeUnit waitUnit, Integer pollingTime, TimeUnit pollingUnit
@@ -586,9 +632,37 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public SeleniumCommands PopWebFrame()
+	public SeleniumCommands PopAllWebFrames()
 	{
+		setCurrentUrl();
+		setLastCommand("PopAllWebFrames");
+		logger.info("Pop All Frames");
+		webFrames.clear();
 		driver.switchTo().defaultContent();
+		return this;
+	}
+
+	@Override
+	public SeleniumCommands PopCurrentWebFrame()
+	{
+		setCurrentUrl();
+		setLastCommand("PopCurrentWebFrame");
+		logger.info("Pop Current Frame " + webFrames.getFirst());
+		if (webFrames.size() <= 1) PopAllWebFrames();
+		else
+		{
+			//switch to default webFrame
+			driver.switchTo().defaultContent();
+
+			//remove the last frame we had entered
+			webFrames.removeFirst();
+
+			//We need to enter each frame
+			for (int i=webFrames.size()-1; i>=0; i--)
+			{
+				webFrames.get(i).EnterWebFrame(this);
+			}
+		}
 		return this;
 	}
 

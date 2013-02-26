@@ -53,6 +53,7 @@ public interface SeleniumCommands
 	public List<WebElement> GetElements(Using locator);
 	public int GetElementCount(Using locator);
 	public String GetElementAttribute(String attribute, Using locator);
+	public SeleniumCommands EnterWebFrame(Using locator);
 
 	/*
 	 * SeleniumCommand only methods
@@ -64,7 +65,8 @@ public interface SeleniumCommands
 	public SeleniumCommands WaitForTime(long time, TimeUnit unit);
 	public SeleniumCommands Open(String url);
 	public SeleniumCommands Close();
-	public SeleniumCommands PopWebFrame();
+	public SeleniumCommands PopAllWebFrames();
+	public SeleniumCommands PopCurrentWebFrame();
 
 	/**
 	 * Uses Javascript to find the unique XPath of the WebElement passed in. For this function to work

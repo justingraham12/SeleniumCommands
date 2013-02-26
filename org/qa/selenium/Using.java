@@ -68,6 +68,7 @@ public abstract class Using
 	public abstract List<WebElement> GetElements(SeleniumCommands commands);
 	public abstract int GetElementCount(SeleniumCommands commands);
 	public abstract String GetElementAttribute(String attribute, SeleniumCommands commands);
+	public abstract void EnterWebFrame(SeleniumCommands commands);
 
 	public static class UsingXPath extends Using
 	{
@@ -141,6 +142,12 @@ public abstract class Using
 		{
 			if (attribute == null) throw new NullPointerException("String param must not be Null");
 			return ((ByXPath) commands).getElementAttributeByXPath(attribute, xpath);
+		}
+
+		@Override
+		public void EnterWebFrame(SeleniumCommands commands)
+		{
+			((ByXPath) commands).enterWebFrameByXPath(xpath);
 		}
 
 		@Override
@@ -237,6 +244,12 @@ public abstract class Using
 		}
 
 		@Override
+		public void EnterWebFrame(SeleniumCommands commands)
+		{
+			((ByCSS) commands).enterWebFrameByCSS(css);
+		}
+
+		@Override
 		public String toString()
 		{
 			return "Css: " + css;
@@ -312,6 +325,12 @@ public abstract class Using
 		{
 			if (attribute == null) throw new NullPointerException("String param must not be Null");
 			return ((ByID) commands).getElementAttributeByID(attribute, id);
+		}
+
+		@Override
+		public void EnterWebFrame(SeleniumCommands commands)
+		{
+			((ByID) commands).enterWebFrameByID(id);
 		}
 
 		@Override
@@ -398,6 +417,12 @@ public abstract class Using
 		{
 			if (attribute == null) throw new NullPointerException("String param must not be Null");
 			return ((ByWebElement) commands).getElementAttributeByWebElement(attribute, element);
+		}
+
+		@Override
+		public void EnterWebFrame(SeleniumCommands commands)
+		{
+			((ByWebElement) commands).enterWebFrameByWebElement(element);
 		}
 
 		@Override

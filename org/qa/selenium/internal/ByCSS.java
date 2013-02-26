@@ -21,4 +21,5 @@ public interface ByCSS
 	WebElement getElementByCSS(String css);
 	int getElementCountByCSS(String css);
 	String getElementAttributeByCSS(String attribute, String css);
+	SeleniumCommands enterWebFrameByCSS(String css);
 }

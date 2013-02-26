@@ -80,4 +80,6 @@ public interface ByXPath
 	int getElementCountByXPath(String xpath);
 
 	String getElementAttributeByXPath(String attribute, String xpath);
+
+	SeleniumCommands enterWebFrameByXPath(String xpath);
 }

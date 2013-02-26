@@ -5,6 +5,7 @@ import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -15,10 +16,7 @@ import org.qa.selenium.internal.ByID;
 import org.qa.selenium.internal.ByWebElement;
 import org.qa.selenium.internal.ByXPath;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,9 +25,16 @@ import java.util.concurrent.TimeUnit;
  */
 public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebElement
 {
+	/*===================================================================
+	 *
+	 * Class Variables
+	 *
+	 *===================================================================*/
+
 	/** Instance of WebDriver to use when calling commands */
 	private final WebDriver driver;
 
+	/** Our log4j logger */
 	private Logger logger = LogManager.getLogger(getClass().getSimpleName());
 
 	/** Initial values for FluentWait's timeout and polling in Seconds */
@@ -45,14 +50,30 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	/** Maintains the order in which we entered nested WebFrames */
 	private LinkedList<Using> webFrames = new LinkedList<Using>();
 
+	private WindowBuilder windowBuilder;
+
+	/** Window handles in the event of a popup */
+	private String parentHandle;
+	private String popUpHandle;
+
+
+	/*===================================================================
+	 *
+	 * Constructor
+	 *
+	 *===================================================================*/
+
 	public Commands(WebDriver driver)
 	{
 		this.driver = driver;
 	}
 
-	/*
-	 * Global Overrides
-	 */
+	/*===================================================================
+	 *
+	 * SeleniumCommands functions
+	 *
+	 *===================================================================*/
+
 	@Override
 	public SeleniumCommands Click(Using locator)
 	{
@@ -218,9 +239,223 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		return this;
 	}
 
-	/*
-		 * CSS Functions
-		 */
+	@Override
+	public SeleniumCommands SetFluentWaitTime(
+			Integer waitTime, TimeUnit waitUnit, Integer pollingTime, TimeUnit pollingUnit
+	)
+	{
+		waitTime = (waitTime == null || waitTime < 0) ? 0 : waitTime;
+		pollingTime = (pollingTime == null || pollingTime < 0) ? 0 : pollingTime;
+		waitUnit = (waitUnit == null) ? TimeUnit.SECONDS : waitUnit;
+		pollingUnit = (pollingUnit == null) ? TimeUnit.SECONDS : pollingUnit;
+
+		waitForElement = waitUnit.toSeconds(waitTime);
+		pollingForElement = pollingUnit.toSeconds(pollingTime);
+
+		if (waitForElement < pollingForElement)
+			throw new IllegalStateException("Wait time must be greater than or equal to polling time");
+
+		return this;
+	}
+
+	@Override
+	public SeleniumCommands WaitForTime(long time, TimeUnit unit)
+	{
+		if (time <= 0) throw new IllegalArgumentException("Wait time must be positive and greater than 0");
+		long waitUntil = System.currentTimeMillis() + unit.toMillis(time);
+		while (System.currentTimeMillis() < waitUntil)
+		{/*Sleep*/}
+		return this;
+	}
+
+	@Override
+	public SeleniumCommands Open(String url)
+	{
+		setLastCommand("Open: " + url);
+		validateURL(url);
+		logger.info("Open: " + url);
+		driver.get(url);
+		return this;
+	}
+
+	@Override
+	public SeleniumCommands Close()
+	{
+		logger.info("Close WebDriver");
+		try
+		{
+			driver.quit();
+		} catch (Exception e)
+		{/*Ignore if driver is already closed*/}
+		return this;
+	}
+
+	@Override
+	public SeleniumCommands PopAllWebFrames()
+	{
+		setCurrentUrl();
+		setLastCommand("PopAllWebFrames");
+		logger.info("Pop All Frames");
+		webFrames.clear();
+		driver.switchTo().defaultContent();
+		return this;
+	}
+
+	@Override
+	public SeleniumCommands PopCurrentWebFrame()
+	{
+		setCurrentUrl();
+		setLastCommand("PopCurrentWebFrame");
+		logger.info("Pop Current Frame " + webFrames.getFirst());
+		if (webFrames.size() <= 1) PopAllWebFrames();
+		else
+		{
+			//switch to default webFrame
+			driver.switchTo().defaultContent();
+
+			//remove the last frame we had entered
+			webFrames.removeFirst();
+
+			//We need to enter each frame
+			for (int i=webFrames.size()-1; i>=0; i--)
+			{
+				webFrames.get(i).EnterWebFrame(this);
+			}
+		}
+		return this;
+	}
+
+	@Override
+	public String GetElementXPath(WebElement element)
+	{
+		setLastCommand("GetElementXPath");
+		return (String) ((JavascriptExecutor) driver).executeScript(
+				"getXPath=function(node)" +
+						"{" +
+						"if (node.id !== '')" +
+						"{" +
+						"return '//' + node.tagName.toLowerCase() + '[@id=\"' + node.id + '\"]'" +
+						"}" +
+
+						"if (node === document.body)" +
+						"{" +
+						"return node.tagName.toLowerCase()" +
+						"}" +
+
+						"var nodeCount = 0;" +
+						"var childNodes = node.parentNode.childNodes;" +
+
+						"for (var i=0; i<childNodes.length; i++)" +
+						"{" +
+						"var currentNode = childNodes[i];" +
+
+						"if (currentNode === node)" +
+						"{" +
+						"return getXPath(node.parentNode) + '/' + node.tagName.toLowerCase() + '[' + (nodeCount+1) + ']'" +
+						"}" +
+
+						"if (currentNode.nodeType === 1 && " +
+						"currentNode.tagName.toLowerCase() === node.tagName.toLowerCase())" +
+						"{" +
+						"nodeCount++" +
+						"}" +
+						"}" +
+						"};" +
+
+						"return getXPath(arguments[0]);", element);
+	}
+
+	@Override
+	public SeleniumCommands OpenNewWindow(String url)
+	{
+		setLastCommand("Open New Window " + url);
+		validateURL(url);
+		logger.info("Open New Window " + url);
+		windowBuilder = new WindowBuilder(driver, url);
+		return this;
+	}
+
+	@Override
+	public SeleniumCommands SwitchToWindow()
+	{
+		if (windowBuilder != null)
+		{
+			windowBuilder.switchToWindow();
+			logger.info("Switch To Window: " + driver.getCurrentUrl());
+		}
+		else
+		{
+			parentHandle = driver.getWindowHandle();
+			Set<String> handles = driver.getWindowHandles();
+			handles.remove(parentHandle);
+			if (handles.size() == 0)
+			{
+				logger.warn("Could not find window to switch to. Returning control to the parent window");
+				parentHandle = null;
+				return this;
+			}
+			popUpHandle = (String) handles.toArray()[0];
+			driver.switchTo().window(popUpHandle);
+			logger.info("Switch To Popup: " + driver.getCurrentUrl());
+		}
+
+		return this;
+	}
+
+	@Override
+	public SeleniumCommands SwitchToParent()
+	{
+		if (windowBuilder != null)
+		{
+			windowBuilder.switchToParent();
+		}
+		else if (popUpHandle != null)
+		{
+			driver.switchTo().window(parentHandle);
+		}
+		else
+		{
+			logger.warn("SwitchToParent Invalid; WebDriver has control of the parent window");
+		}
+
+		logger.info("Switch To Parent: " + driver.getCurrentUrl());
+
+		return this;
+	}
+
+	@Override
+	public SeleniumCommands CloseWindow()
+	{
+		if (windowBuilder != null)
+		{
+			logger.info("Close Window");
+			windowBuilder.close();
+			windowBuilder = null;
+		}
+		else if (popUpHandle != null)
+		{
+			if (driver.getWindowHandle().equals(popUpHandle))
+			{
+				logger.info("Close Popup");
+				driver.close();
+				popUpHandle = null;
+				driver.switchTo().window(parentHandle);
+			}
+			else
+			{
+				logger.warn("CloseWindow Invalid; WebDriver has control of the parent window");
+			}
+		}
+
+		return this;
+	}
+
+	/*===================================================================
+	 *
+	 * ByCSS functions
+	 *
+	 *===================================================================*/
+
 	@Override
 	public SeleniumCommands clickElementByCSS(String css)
 	{
@@ -310,9 +545,13 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		return this;
 	}
 
-	/*
-		 * ID Functions
-		 */
+
+	/*===================================================================
+	 *
+	 * ByID functions
+	 *
+	 *===================================================================*/
+
 	@Override
 	public SeleniumCommands clickElementByID(String id)
 	{
@@ -402,9 +641,13 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		return this;
 	}
 
-	/*
-		 * XPath Functions
-		 */
+
+	/*===================================================================
+	 *
+	 * ByXPath functions
+	 *
+	 *===================================================================*/
+
 	@Override
 	public SeleniumCommands clickElementByXPath(String xpath)
 	{
@@ -494,9 +737,13 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		return this;
 	}
 
-	/*
-		 * WebElement Functions
-		 */
+
+	/*===================================================================
+	 *
+	 * ByWebElement functions
+	 *
+	 *===================================================================*/
+
 	@Override
 	public SeleniumCommands clickElementByWebElement(WebElement element)
 	{
@@ -575,139 +822,13 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		return this;
 	}
 
-	/*
-			 * SeleniumCommand Functions
-			 */
-	@Override
-	public SeleniumCommands SetFluentWaitTime(
-			Integer waitTime, TimeUnit waitUnit, Integer pollingTime, TimeUnit pollingUnit
-	)
-	{
-		waitTime = (waitTime == null || waitTime < 0) ? 0 : waitTime;
-		pollingTime = (pollingTime == null || pollingTime < 0) ? 0 : pollingTime;
-		waitUnit = (waitUnit == null) ? TimeUnit.SECONDS : waitUnit;
-		pollingUnit = (pollingUnit == null) ? TimeUnit.SECONDS : pollingUnit;
 
-		waitForElement = waitUnit.toSeconds(waitTime);
-		pollingForElement = pollingUnit.toSeconds(pollingTime);
+	/*===================================================================
+	 *
+	 * Private Class functions
+	 *
+	 *===================================================================*/
 
-		if (waitForElement < pollingForElement)
-			throw new IllegalStateException("Wait time must be greater than or equal to polling time");
-
-		return this;
-	}
-
-	@Override
-	public SeleniumCommands WaitForTime(long time, TimeUnit unit)
-	{
-		if (time <= 0) throw new IllegalArgumentException("Wait time must be positive and greater than 0");
-		long waitUntil = System.currentTimeMillis() + unit.toMillis(time);
-		while (System.currentTimeMillis() < waitUntil)
-		{/*Sleep*/}
-		return this;
-	}
-
-	@Override
-	public SeleniumCommands Open(String url)
-	{
-		if (url == null) throw new NullPointerException("URL must not be Null");
-		UrlValidator validate = new UrlValidator(new String[]{"http", "https"});
-		if (!validate.isValid(url)) {
-			Close();
-			throw new IllegalArgumentException("Url '" + url + "' is invalid.");
-		}
-		driver.get(url);
-		return this;
-	}
-
-	@Override
-	public SeleniumCommands Close()
-	{
-		try
-		{
-			driver.quit();
-		} catch (Exception e)
-		{/*Ignore if driver is already closed*/}
-		return this;
-	}
-
-	@Override
-	public SeleniumCommands PopAllWebFrames()
-	{
-		setCurrentUrl();
-		setLastCommand("PopAllWebFrames");
-		logger.info("Pop All Frames");
-		webFrames.clear();
-		driver.switchTo().defaultContent();
-		return this;
-	}
-
-	@Override
-	public SeleniumCommands PopCurrentWebFrame()
-	{
-		setCurrentUrl();
-		setLastCommand("PopCurrentWebFrame");
-		logger.info("Pop Current Frame " + webFrames.getFirst());
-		if (webFrames.size() <= 1) PopAllWebFrames();
-		else
-		{
-			//switch to default webFrame
-			driver.switchTo().defaultContent();
-
-			//remove the last frame we had entered
-			webFrames.removeFirst();
-
-			//We need to enter each frame
-			for (int i=webFrames.size()-1; i>=0; i--)
-			{
-				webFrames.get(i).EnterWebFrame(this);
-			}
-		}
-		return this;
-	}
-
-	@Override
-	public String GetElementXPath(WebElement element)
-	{
-		return (String) ((JavascriptExecutor) driver).executeScript(
-			"getXPath=function(node)" +
-			"{" +
-				"if (node.id !== '')" +
-				"{" +
-					"return '//' + node.tagName.toLowerCase() + '[@id=\"' + node.id + '\"]'" +
-				"}" +
-
-				"if (node === document.body)" +
-				"{" +
-					"return node.tagName.toLowerCase()" +
-				"}" +
-
-				"var nodeCount = 0;" +
-				"var childNodes = node.parentNode.childNodes;" +
-
-				"for (var i=0; i<childNodes.length; i++)" +
-				"{" +
-					"var currentNode = childNodes[i];" +
-
-					"if (currentNode === node)" +
-					"{" +
-						"return getXPath(node.parentNode) + '/' + node.tagName.toLowerCase() + '[' + (nodeCount+1) + ']'" +
-					"}" +
-
-					"if (currentNode.nodeType === 1 && " +
-						"currentNode.tagName.toLowerCase() === node.tagName.toLowerCase())" +
-					"{" +
-						"nodeCount++" +
-					"}" +
-				"}" +
-			"};" +
-
-			"return getXPath(arguments[0]);", element);
-	}
-
-	/*
-	 * Class Functions
-	 */
 	private Wait<WebDriver> Wait()
 	{
 		return new FluentWait<WebDriver>(driver)
@@ -716,14 +837,6 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 				.pollingEvery(pollingForElement, TimeUnit.SECONDS)
 				.ignoring(NoSuchElementException.class);
 	}
-
-	/*private Wait<WebDriver> debugWait()
-	{
-		return new FluentWait<WebDriver>(driver)
-				.withTimeout(2, TimeUnit.SECONDS)
-				.pollingEvery(500, TimeUnit.MILLISECONDS)
-				.ignoring(NoSuchElementException.class);
-	}*/
 
 	private WebElement fluentWaitForElementXPath(final String xpath)
 	{
@@ -886,5 +999,15 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		Random rand = new Random();
 		comboBox.selectByIndex(rand.nextInt(size));
 		return this;
+	}
+
+	private void validateURL(String url)
+	{
+		if (url == null) throw new NullPointerException("URL must not be Null");
+		UrlValidator validate = new UrlValidator(new String[]{"http", "https"});
+		if (!validate.isValid(url)) {
+			Close();
+			throw new IllegalArgumentException("Url '" + url + "' is invalid.");
+		}
 	}
 }

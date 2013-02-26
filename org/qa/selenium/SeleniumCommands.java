@@ -54,11 +54,6 @@ public interface SeleniumCommands
 	public int GetElementCount(Using locator);
 	public String GetElementAttribute(String attribute, Using locator);
 	public SeleniumCommands EnterWebFrame(Using locator);
-
-	/*
-	 * SeleniumCommand only methods
-	 */
-
 	public SeleniumCommands SetFluentWaitTime(
 			Integer waitTime, TimeUnit waitUnit, Integer pollingTime, TimeUnit pollingUnit
 	);
@@ -76,4 +71,9 @@ public interface SeleniumCommands
 	 * @return A valid unique XPath targeting the element
 	 */
 	public String GetElementXPath(WebElement element);
+
+	public SeleniumCommands OpenNewWindow(String url);
+	public SeleniumCommands SwitchToWindow();
+	public SeleniumCommands SwitchToParent();
+	public SeleniumCommands CloseWindow();
 }

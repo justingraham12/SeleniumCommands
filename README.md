@@ -25,8 +25,8 @@ WebElement element = driver.findElement(By.loc(""));
 ```
 Causes Selenium to throw false positive NoSuchElementExceptions. Selenium is unable to follow JavaScript thus if we have
 a JS command create DOM elements after our page loads, Selenium will already have looked for the element and thrown an 
-Exception before our JS completed. Thus we end up with errors where the page has completely loaded but the elements we
-are request are not yet available.  
+Exception before our JS completed and we end up with errors where the page has completely loaded but the elements we 
+request are not yet available.  
 
 ######Implicit Wait
 ```java
@@ -34,8 +34,8 @@ driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 WebElement element = driver.findElement(By.loc(""));
 ```
 In theory this should fix any issues of calling WebElements without a wait. But unforchantly this isn't failsafe and not
-even cross browser compliant. (NOTE: Last time I tested implicit waits was in 2.14 so this could have been fixed). This 
-was by far the biggest issue. I could set up an implicit wait but the behavior would change between browsers. 
+even cross browser compliant. (NOTE: Last time I tested implicit waits was in 2.14 so this could have been fixed). When
+setting up implicit waits the behavior would change between browsers. 
 
 ######Explicit Wait
 ```java
@@ -65,10 +65,11 @@ WebElement element = wait.until(new Function<WebDriver, WebElement>(){
   }
 });
 ```
-Fluent waits are the most reliable wait I've found in Selenium. Thus all calls through a SeleniumCommands object
-first run through a fluent wait. Initially the timeout is set to 15 seconds and polls every 1. After 15 seconds of not
-finding an element we assume the element is not going to load and throw the NoSuchElementException. You have full 
-control of the timeout and polling by calling the following.
+Fluent waits are the most flexible wait I've found in Selenium. All calls through a SeleniumCommands object
+first run through a fluent wait. This reduces the problems you'll run into when testing pages with AJAX content.
+Initially the timeout is set to 15 seconds and polls every 1. After 15 seconds of not finding an element we assume 
+the element is not going to load and throw the NoSuchElementException. You of course have full control of the 
+timeout and polling by calling the following.
 
 ```java
 SeleniumCommands commands = new Commands(new FirefoxDriver())
@@ -78,9 +79,26 @@ This sets the Timeout value to 20 seconds and the polling time to 500 millisecon
 
 ##Current functions and usage
 
-Search types: ID, CSS, XPath
+Locators: ID, CSS, XPath, WebElement
 
-Functions: Open, Close, Click, Type, ComboBoxText, WaitForElement, GetElement, GetElements, GetElementCount
+Current Functions:  
+```java 
+  .Open                 (String url)
+  .Close                ()
+  .SetFluentWaitTime    (int wait, TimeUnit waitUnit, int poll, TimeUnit pollUnit) 
+  .Click                (Using locator)
+  .ClickRandom          (Using locator)
+  .Type                 (String inputText, Using locator)
+  .ComboBoxByText       (String visibleText, Using locator)
+  .ComboBoxRandom       (Using locator)
+  .WaitForElement       (Using locator)
+  .WaitForTime          (long time, TimeUnit unit)
+  .GetElement           (Using locator)
+  .GetElements          (Using locator)
+  .GetElementCount      (Using locator)
+  .GetElementAttribute  (String Attribute, Using locator)
+  .GetElementXPath      (WebElement element)
+```
 
 
 In use:

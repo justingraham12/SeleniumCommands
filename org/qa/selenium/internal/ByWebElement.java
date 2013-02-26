@@ -22,4 +22,5 @@ public interface ByWebElement
 	int getElementCountByWebElement(WebElement element);
 	String getElementAttributeByWebElement(String attribute, WebElement element);
 	SeleniumCommands enterWebFrameByWebElement(WebElement element);
+	String getTextByWebElement(WebElement element);
 }

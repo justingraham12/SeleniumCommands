@@ -76,4 +76,5 @@ public interface SeleniumCommands
 	public SeleniumCommands SwitchToWindow();
 	public SeleniumCommands SwitchToParent();
 	public SeleniumCommands CloseWindow();
+	public String GetText(Using locator);
 }

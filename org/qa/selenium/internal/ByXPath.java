@@ -81,5 +81,7 @@ public interface ByXPath
 
 	String getElementAttributeByXPath(String attribute, String xpath);
 
+	String getTextByXPath(String xpath);
+
 	SeleniumCommands enterWebFrameByXPath(String xpath);
 }

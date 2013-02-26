@@ -22,4 +22,5 @@ public interface ByID
 	int getElementCountByID(String id);
 	String getElementAttributeByID(String attribute, String id);
 	SeleniumCommands enterWebFrameByID(String id);
+	String getTextByID(String id);
 }

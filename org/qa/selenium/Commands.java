@@ -229,6 +229,14 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
+	public String GetText(Using locator)
+	{
+		setCurrentUrl();
+		setLastCommand("GetText Using " + locator);
+		return locator.GetText(this);
+	}
+
+	@Override
 	public SeleniumCommands EnterWebFrame(Using locator)
 	{
 		setCurrentUrl();
@@ -538,6 +546,13 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
+	public String getTextByCSS(String css)
+	{
+		WebElement element = fluentWaitForElementCss(css);
+		return element.getText();
+	}
+
+	@Override
 	public SeleniumCommands enterWebFrameByCSS(String css)
 	{
 		WebElement element = fluentWaitForElementCss(css);
@@ -631,6 +646,13 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	{
 		WebElement element = fluentWaitForElementId(id);
 		return element.getAttribute(attribute);
+	}
+
+	@Override
+	public String getTextByID(String id)
+	{
+		WebElement element = fluentWaitForElementId(id);
+		return element.getText();
 	}
 
 	@Override
@@ -730,6 +752,13 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
+	public String getTextByXPath(String xpath)
+	{
+		WebElement element = fluentWaitForElementXPath(xpath);
+		return element.getText();
+	}
+
+	@Override
 	public SeleniumCommands enterWebFrameByXPath(String xpath)
 	{
 		WebElement element = fluentWaitForElementXPath(xpath);
@@ -813,6 +842,12 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	public String getElementAttributeByWebElement(String attribute, WebElement element)
 	{
 		return element.getAttribute(attribute);
+	}
+
+	@Override
+	public String getTextByWebElement(WebElement element)
+	{
+		return element.getText();
 	}
 
 	@Override

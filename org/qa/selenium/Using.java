@@ -453,7 +453,24 @@ public abstract class Using
 		@Override
 		public String toString()
 		{
-			return "WebElement: " + element.toString();
+			String tagName = 	element.getTagName();
+			String id = 		element.getAttribute("id");
+			String clazz = 		element.getAttribute("class");
+			String title = 		element.getAttribute("title");
+			String name = 		element.getAttribute("name");
+			String style = 		element.getAttribute("style");
+			String type = 		element.getAttribute("type");
+
+			String webElement = "WebElement: <" + tagName;
+			webElement += (id != null && !id.equals("")) 		? " id='" + id + "'" 		: "";
+			webElement += (clazz != null && !clazz.equals("")) 	? " class='" + clazz + "'" 	: "";
+			webElement += (title != null && !title.equals("")) 	? " title='" + title + "'" 	: "";
+			webElement += (name != null && !name.equals("")) 	? " name='" + name + "'" 	: "";
+			webElement += (style != null && !style.equals("")) 	? " style='" + style + "'" 	: "";
+			webElement += (type != null && !type.equals("")) 	? " type='" + type + "'" 	: "";
+			webElement += ">...</" + tagName + ">";
+
+			return webElement;
 		}
 	}
 }

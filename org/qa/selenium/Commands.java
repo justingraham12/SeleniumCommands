@@ -115,6 +115,17 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
+	public SeleniumCommands CheckBox(boolean selected, Using locator)
+	{
+		setCurrentUrl();
+		String option = (selected) ? "check" : "un-check";
+		setLastCommand("CheckBox '" + option + "' Using " + locator);
+		logger.info("CheckBox '" + option + "' Using " + locator);
+		locator.CheckBox(selected, this);
+		return this;
+	}
+
+	@Override
 	public WebElement GetElement(Using locator)
 	{
 		setCurrentUrl();
@@ -183,11 +194,11 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public SeleniumCommands ComboBoxRandom(Using locator, String comboBoxName)
+	public SeleniumCommands ComboBoxRandom(Using locator, String select)
 	{
 		setCurrentUrl();
-		setLastCommand("ComboBoxRandom from '" + comboBoxName + "' Using " + locator);
-		logger.info("ComboBoxRandom from '" + comboBoxName + "' Using " + locator);
+		setLastCommand("ComboBoxRandom select '" + select + "' Using " + locator);
+		logger.info("ComboBoxRandom select '" + select + "' Using " + locator);
 		locator.ComboBoxRandom(this);
 		return this;
 	}
@@ -279,9 +290,9 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	@Override
 	public SeleniumCommands Open(String url)
 	{
-		setLastCommand("Open: " + url);
+		setLastCommand("Open '" + url + "'");
 		validateURL(url);
-		logger.info("Open: " + url);
+		logger.info("Open '" + url + "'");
 		driver.get(url);
 		return this;
 	}
@@ -483,6 +494,17 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
+	public SeleniumCommands checkBoxByCSS(boolean selected, String css)
+	{
+		WebElement element = fluentWaitForElementCss(css);
+		if (selected != element.isSelected())
+		{
+			clickElementByWebElement(element);
+		}
+		return this;
+	}
+
+	@Override
 	public WebElement getElementByCSS(String css)
 	{
 		return fluentWaitForElementCss(css);
@@ -583,6 +605,17 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		waitForID(id);
 		List<WebElement> elements = getAllVisibleElements(fluentWaitForElementsId(id));
 		return clickRandom(elements);
+	}
+
+	@Override
+	public SeleniumCommands checkBoxByID(boolean selected, String id)
+	{
+		WebElement element = fluentWaitForElementId(id);
+		if (selected != element.isSelected())
+		{
+			clickElementByWebElement(element);
+		}
+		return this;
 	}
 
 	@Override
@@ -689,6 +722,17 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
+	public SeleniumCommands checkBoxByXPath(boolean selected, String xpath)
+	{
+		WebElement element = fluentWaitForElementXPath(xpath);
+		if (selected != element.isSelected())
+		{
+			clickElementByWebElement(element);
+		}
+		return this;
+	}
+
+	@Override
 	public WebElement getElementByXPath(String xpath)
 	{
 		return fluentWaitForElementXPath(xpath);
@@ -786,6 +830,16 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	public SeleniumCommands clickRandomElementByWebElement(List<WebElement> elements)
 	{
 		return clickRandom(elements);
+	}
+
+	@Override
+	public SeleniumCommands checkBoxByWebElement(boolean selected, WebElement element)
+	{
+		if (selected != element.isSelected())
+		{
+			clickElementByWebElement(element);
+		}
+		return this;
 	}
 
 	@Override

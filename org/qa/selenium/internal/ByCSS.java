@@ -23,4 +23,5 @@ public interface ByCSS
 	String getElementAttributeByCSS(String attribute, String css);
 	SeleniumCommands enterWebFrameByCSS(String css);
 	String getTextByCSS(String css);
+	SeleniumCommands checkBoxByCSS(boolean selected, String css);
 }

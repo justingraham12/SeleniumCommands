@@ -41,6 +41,7 @@ public interface SeleniumCommands
 
 	public SeleniumCommands ClickRandom(Using locator);
 	public SeleniumCommands ClickRandom(Using locator, String linkName);
+	public SeleniumCommands CheckBox(boolean selected, Using locator);
 	public SeleniumCommands Type(String input, Using locator);
 	public SeleniumCommands Type(String input, Using locator, String inputName);
 	public SeleniumCommands ComboBoxByText(String visibleText, Using locator);

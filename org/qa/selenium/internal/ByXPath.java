@@ -84,4 +84,6 @@ public interface ByXPath
 	String getTextByXPath(String xpath);
 
 	SeleniumCommands enterWebFrameByXPath(String xpath);
+
+	SeleniumCommands checkBoxByXPath(boolean selected, String xpath);
 }

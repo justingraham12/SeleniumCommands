@@ -23,4 +23,5 @@ public interface ByID
 	String getElementAttributeByID(String attribute, String id);
 	SeleniumCommands enterWebFrameByID(String id);
 	String getTextByID(String id);
+	SeleniumCommands checkBoxByID(boolean selected, String id);
 }

@@ -23,4 +23,5 @@ public interface ByWebElement
 	String getElementAttributeByWebElement(String attribute, WebElement element);
 	SeleniumCommands enterWebFrameByWebElement(WebElement element);
 	String getTextByWebElement(WebElement element);
+	SeleniumCommands checkBoxByWebElement(boolean selected, WebElement element);
 }

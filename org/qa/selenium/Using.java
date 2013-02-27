@@ -70,6 +70,7 @@ public abstract class Using
 	public abstract String GetElementAttribute(String attribute, SeleniumCommands commands);
 	public abstract void EnterWebFrame(SeleniumCommands commands);
 	public abstract String GetText(SeleniumCommands commands);
+	public abstract void CheckBox(boolean selected, SeleniumCommands commands);
 
 	public static class UsingXPath extends Using
 	{
@@ -92,6 +93,12 @@ public abstract class Using
 		public void ClickRandom(SeleniumCommands commands)
 		{
 			((ByXPath) commands).clickRandomElementByXPath(xpath);
+		}
+
+		@Override
+		public void CheckBox(boolean selected, SeleniumCommands commands)
+		{
+			((ByXPath) commands).checkBoxByXPath(selected, xpath);
 		}
 
 		@Override
@@ -202,6 +209,12 @@ public abstract class Using
 		}
 
 		@Override
+		public void CheckBox(boolean selected, SeleniumCommands commands)
+		{
+			((ByCSS) commands).checkBoxByCSS(selected, css);
+		}
+
+		@Override
 		public WebElement GetElement(SeleniumCommands commands)
 		{
 			return ((ByCSS) commands).getElementByCSS(css);
@@ -289,6 +302,12 @@ public abstract class Using
 		public void ClickRandom(SeleniumCommands commands)
 		{
 			((ByID) commands).clickRandomElementByID(id);
+		}
+
+		@Override
+		public void CheckBox(boolean selected, SeleniumCommands commands)
+		{
+			((ByID) commands).checkBoxByID(selected, id);
 		}
 
 		@Override
@@ -387,6 +406,12 @@ public abstract class Using
 		public void ClickRandom(SeleniumCommands commands)
 		{
 			((ByWebElement) commands).clickRandomElementByWebElement(elements);
+		}
+
+		@Override
+		public void CheckBox(boolean selected, SeleniumCommands commands)
+		{
+			((ByWebElement) commands).checkBoxByWebElement(selected, element);
 		}
 
 		@Override

@@ -16,6 +16,10 @@ public interface ByWebElement
 	SeleniumCommands typeByWebElement(String input, WebElement element);
 	SeleniumCommands comboBoxVisibleTextByWebElement(String visibleText, WebElement element);
 	SeleniumCommands comboBoxRandomByWebElement(WebElement element);
+	SeleniumCommands comboBoxIndexByWebElement(int index, WebElement element);
+	List<WebElement> comboBoxGetOptionsByWebElement(WebElement element);
+	String comboBoxGetDisplayTextByWebElement(WebElement element);
+	int comboBoxGetDisplayIndexByWebElement(WebElement element);
 	SeleniumCommands waitForWebElement(WebElement element);
 	List<WebElement> getElementsByWebElement(WebElement element);
 	WebElement getElementByWebElement(WebElement element);

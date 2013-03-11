@@ -17,6 +17,7 @@ public class WindowBuilder
 	private String handle;
 	private String name;
 	private String parentHandle;
+	private String windowUrl;
 	private static int instanceCount = 0;
 
 	/**
@@ -33,6 +34,7 @@ public class WindowBuilder
 		handle = createWindow(url);
 		//Switch to that window and load the url to waitForElement
 		switchToWindow().get(url);
+		windowUrl = parent.getCurrentUrl();
 	}
 
 	/**
@@ -55,6 +57,11 @@ public class WindowBuilder
 		return parentHandle;
 	}
 
+	public String getWindowUrl()
+	{
+		return windowUrl;
+	}
+
 	/**
 	 * Closes the current window
 	 */
@@ -74,7 +81,9 @@ public class WindowBuilder
 	public WebDriver switchToWindow()
 	{
 		checkForClosed();
-		return driver.switchTo().window(handle);
+		driver.switchTo().window(handle);
+		windowUrl = driver.getCurrentUrl();
+		return driver;
 	}
 
 	public WebDriver switchToParent()

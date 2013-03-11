@@ -16,6 +16,10 @@ public interface ByCSS
 	SeleniumCommands typeByCSS(String input, String css);
 	SeleniumCommands comboBoxVisibleTextByCSS(String visibleText, String css);
 	SeleniumCommands comboBoxRandomByCSS(String css);
+	SeleniumCommands comboBoxIndexByCSS(int index, String css);
+	List<WebElement> comboBoxGetOptionsByCSS(String css);
+	String comboBoxGetDisplayTextByCSS(String css);
+	int comboBoxGetDisplayIndexByCSS(String css);
 	SeleniumCommands waitForCSS(String css);
 	List<WebElement> getElementsByCSS(String css);
 	WebElement getElementByCSS(String css);

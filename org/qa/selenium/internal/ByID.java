@@ -16,6 +16,10 @@ public interface ByID
 	SeleniumCommands typeByID(String input, String id);
 	SeleniumCommands comboBoxVisibleTextByID(String visibleText, String id);
 	SeleniumCommands comboBoxRandomByID(String id);
+	SeleniumCommands comboBoxIndexByID(int index, String id);
+	List<WebElement> comboBoxGetOptionsByID(String id);
+	String comboBoxGetDisplayTextByID(String id);
+	int comboBoxGetDisplayIndexByID(String id);
 	SeleniumCommands waitForID(String id);
 	List<WebElement> getElementsByID(String id);
 	WebElement getElementByID(String id);

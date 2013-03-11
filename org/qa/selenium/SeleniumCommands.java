@@ -46,8 +46,11 @@ public interface SeleniumCommands
 	public SeleniumCommands Type(String input, Using locator, String inputName);
 	public SeleniumCommands ComboBoxByText(String visibleText, Using locator);
 	public SeleniumCommands ComboBoxByText(String visibleText, Using locator, String comboBoxName);
+	public SeleniumCommands ComboBoxByIndex(int index, Using locator);
 	public SeleniumCommands ComboBoxRandom(Using locator);
-	public SeleniumCommands ComboBoxRandom(Using locator, String comboBoxName);
+	public List<WebElement> ComboBoxGetOptions(Using locator);
+	public String ComboBoxGetDisplayText(Using locator);
+	public int ComboBoxGetDisplayIndex(Using locator);
 	public SeleniumCommands WaitForElement(Using locator);
 	public SeleniumCommands WaitForElement(Using locator, String elementName);
 	public WebElement GetElement(Using locator);

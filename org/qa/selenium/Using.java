@@ -62,7 +62,11 @@ public abstract class Using
 	public abstract void ClickRandom(SeleniumCommands commands);
 	public abstract void Type(String input, SeleniumCommands commands);
 	public abstract void ComboBoxText(String visibleText, SeleniumCommands commands);
+	public abstract void ComboBoxIndex(int index, SeleniumCommands commands);
 	public abstract void ComboBoxRandom(SeleniumCommands commands);
+	public abstract String ComboBoxDisplayText(SeleniumCommands commands);
+	public abstract int ComboBoxDisplayIndex(SeleniumCommands commands);
+	public abstract List<WebElement> ComboBoxGetOptions(SeleniumCommands commands);
 	public abstract void WaitForElement(SeleniumCommands commands);
 	public abstract WebElement GetElement(SeleniumCommands commands);
 	public abstract List<WebElement> GetElements(SeleniumCommands commands);
@@ -128,9 +132,34 @@ public abstract class Using
 		}
 
 		@Override
+		public void ComboBoxIndex(int index, SeleniumCommands commands)
+		{
+			if (index < 0) throw new IllegalArgumentException("Index must be greater then 0");
+			((ByXPath) commands).comboBoxIndexByXPath(index, xpath);
+		}
+
+		@Override
 		public void ComboBoxRandom(SeleniumCommands commands)
 		{
 			((ByXPath) commands).comboBoxRandomByXPath(xpath);
+		}
+
+		@Override
+		public String ComboBoxDisplayText(SeleniumCommands commands)
+		{
+			return ((ByXPath) commands).comboBoxGetDisplayTextByXPath(xpath);
+		}
+
+		@Override
+		public int ComboBoxDisplayIndex(SeleniumCommands commands)
+		{
+			return ((ByXPath) commands).comboBoxGetDisplayIndexByXPath(xpath);
+		}
+
+		@Override
+		public List<WebElement> ComboBoxGetOptions(SeleniumCommands commands)
+		{
+			return ((ByXPath) commands).comboBoxGetOptionsByXPath(xpath);
 		}
 
 		@Override
@@ -239,9 +268,34 @@ public abstract class Using
 		}
 
 		@Override
+		public void ComboBoxIndex(int index, SeleniumCommands commands)
+		{
+			if (index < 0) throw new IllegalArgumentException("Index must be greater then 0");
+			((ByCSS) commands).comboBoxIndexByCSS(index, css);
+		}
+
+		@Override
 		public void ComboBoxRandom(SeleniumCommands commands)
 		{
 			((ByCSS) commands).comboBoxRandomByCSS(css);
+		}
+
+		@Override
+		public String ComboBoxDisplayText(SeleniumCommands commands)
+		{
+			return ((ByCSS) commands).comboBoxGetDisplayTextByCSS(css);
+		}
+
+		@Override
+		public int ComboBoxDisplayIndex(SeleniumCommands commands)
+		{
+			return ((ByCSS) commands).comboBoxGetDisplayIndexByCSS(css);
+		}
+
+		@Override
+		public List<WebElement> ComboBoxGetOptions(SeleniumCommands commands)
+		{
+			return ((ByCSS) commands).comboBoxGetOptionsByCSS(css);
 		}
 
 		@Override
@@ -335,9 +389,34 @@ public abstract class Using
 		}
 
 		@Override
+		public void ComboBoxIndex(int index, SeleniumCommands commands)
+		{
+			if (index < 0) throw new IllegalArgumentException("Index must be greater then 0");
+			((ByID) commands).comboBoxIndexByID(index, id);
+		}
+
+		@Override
 		public void ComboBoxRandom(SeleniumCommands commands)
 		{
 			((ByID) commands).comboBoxRandomByID(id);
+		}
+
+		@Override
+		public String ComboBoxDisplayText(SeleniumCommands commands)
+		{
+			return ((ByID) commands).comboBoxGetDisplayTextByID(id);
+		}
+
+		@Override
+		public int ComboBoxDisplayIndex(SeleniumCommands commands)
+		{
+			return ((ByID) commands).comboBoxGetDisplayIndexByID(id);
+		}
+
+		@Override
+		public List<WebElement> ComboBoxGetOptions(SeleniumCommands commands)
+		{
+			return ((ByID) commands).comboBoxGetOptionsByID(id);
 		}
 
 		@Override
@@ -427,9 +506,34 @@ public abstract class Using
 		}
 
 		@Override
+		public void ComboBoxIndex(int index, SeleniumCommands commands)
+		{
+			if (index < 0) throw new IllegalArgumentException("Index must be greater then 0");
+			((ByWebElement) commands).comboBoxIndexByWebElement(index, element);
+		}
+
+		@Override
 		public void ComboBoxRandom(SeleniumCommands commands)
 		{
 			((ByWebElement) commands).comboBoxRandomByWebElement(element);
+		}
+
+		@Override
+		public String ComboBoxDisplayText(SeleniumCommands commands)
+		{
+			return ((ByWebElement) commands).comboBoxGetDisplayTextByWebElement(element);
+		}
+
+		@Override
+		public int ComboBoxDisplayIndex(SeleniumCommands commands)
+		{
+			return ((ByWebElement) commands).comboBoxGetDisplayIndexByWebElement(element);
+		}
+
+		@Override
+		public List<WebElement> ComboBoxGetOptions(SeleniumCommands commands)
+		{
+			return ((ByWebElement) commands).comboBoxGetOptionsByWebElement(element);
 		}
 
 		@Override

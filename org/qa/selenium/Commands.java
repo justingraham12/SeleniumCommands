@@ -79,7 +79,6 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	{
 		setCurrentUrl();
 		setLastCommand("Click Using " + locator);
-		logger.info("Click Using " + locator);
 		locator.Click(this);
 		return this;
 	}
@@ -89,7 +88,6 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	{
 		setCurrentUrl();
 		setLastCommand("Click '" + linkName + "' Using " + locator);
-		logger.info("Click '" + linkName + "' Using " + locator);
 		locator.Click(this);
 		return this;
 	}
@@ -99,7 +97,6 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	{
 		setCurrentUrl();
 		setLastCommand("Click Random '" + linkName + "' Using " + locator);
-		logger.info("Click Random '" + linkName + "' Using " + locator);
 		locator.ClickRandom(this);
 		return this;
 	}
@@ -109,7 +106,6 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	{
 		setCurrentUrl();
 		setLastCommand("Click Random Using " + locator);
-		logger.info("Click Random Using " + locator);
 		locator.ClickRandom(this);
 		return this;
 	}
@@ -120,7 +116,6 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		setCurrentUrl();
 		String option = (selected) ? "check" : "un-check";
 		setLastCommand("CheckBox '" + option + "' Using " + locator);
-		logger.info("CheckBox '" + option + "' Using " + locator);
 		locator.CheckBox(selected, this);
 		return this;
 	}
@@ -146,7 +141,6 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	{
 		setCurrentUrl();
 		setLastCommand("Type '" + input + "' Using " + locator);
-		logger.info("Type '" + input + "' Using " + locator);
 		locator.Type(input, this);
 		return this;
 	}
@@ -156,7 +150,6 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	{
 		setCurrentUrl();
 		setLastCommand("Type '" + input + "' into " + inputName + " Using " + locator);
-		logger.info("Type '" + input + "' into " + inputName + " Using " + locator);
 		locator.Type(input, this);
 		return this;
 	}
@@ -165,9 +158,17 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	public SeleniumCommands ComboBoxByText(String visibleText, Using locator)
 	{
 		setCurrentUrl();
-		setLastCommand("ComboBoxByText '" + visibleText + "' Using " + locator);
-		logger.info("Select '" + visibleText + "' Using " + locator);
+		setLastCommand("Select '" + visibleText + "' Using " + locator);
 		locator.ComboBoxText(visibleText, this);
+		return this;
+	}
+
+	@Override
+	public SeleniumCommands ComboBoxByIndex(int index, Using locator)
+	{
+		setCurrentUrl();
+		setLastCommand("Select index '" + index + "' Using " + locator);
+		locator.ComboBoxIndex(index, this);
 		return this;
 	}
 
@@ -177,38 +178,49 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	)
 	{
 		setCurrentUrl();
-		setLastCommand("ComboBoxByText '" + visibleText + "' from '" + comboBoxName + "' Using " + locator);
-		logger.info("Select '" + visibleText + "' from '" + comboBoxName + "' Using " + locator);
+		setLastCommand("Select '" + visibleText + "' from '" + comboBoxName + "' Using " + locator);
 		locator.ComboBoxText(visibleText, this);
 		return this;
+	}
+
+	@Override
+	public String ComboBoxGetDisplayText(Using locator)
+	{
+		setCurrentUrl();
+		setLastCommand("ComboBox get display text Using " + locator);
+		return locator.ComboBoxDisplayText(this);
+	}
+
+	@Override
+	public int ComboBoxGetDisplayIndex(Using locator)
+	{
+		setCurrentUrl();
+		setLastCommand("ComboBox get display index Using " + locator);
+		return locator.ComboBoxDisplayIndex(this);
 	}
 
 	@Override
 	public SeleniumCommands ComboBoxRandom(Using locator)
 	{
 		setCurrentUrl();
-		setLastCommand("ComboBoxRandom Using " + locator);
-		logger.info("ComboBoxRandom Using " + locator);
+		setLastCommand("Select Random Using " + locator);
 		locator.ComboBoxRandom(this);
 		return this;
 	}
 
 	@Override
-	public SeleniumCommands ComboBoxRandom(Using locator, String select)
+	public List<WebElement> ComboBoxGetOptions(Using locator)
 	{
 		setCurrentUrl();
-		setLastCommand("ComboBoxRandom select '" + select + "' Using " + locator);
-		logger.info("ComboBoxRandom select '" + select + "' Using " + locator);
-		locator.ComboBoxRandom(this);
-		return this;
+		setLastCommand("Get ComboBox Options Using " + locator);
+		return locator.ComboBoxGetOptions(this);
 	}
 
 	@Override
 	public SeleniumCommands WaitForElement(Using locator)
 	{
 		setCurrentUrl();
-		setLastCommand("WaitForElement Using " + locator);
-		logger.info("Wait for " + locator);
+		setLastCommand("Wait for WebElement Using " + locator);
 		locator.WaitForElement(this);
 		return this;
 	}
@@ -217,8 +229,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	public SeleniumCommands WaitForElement(Using locator, String elementName)
 	{
 		setCurrentUrl();
-		setLastCommand("WaitForElement '" + elementName + "' Using " + locator);
-		logger.info("Wait for '" + elementName + "' Using " + locator);
+		setLastCommand("Wait for WebElement '" + elementName + "' Using " + locator);
 		locator.WaitForElement(this);
 		return this;
 	}
@@ -252,7 +263,6 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	{
 		setCurrentUrl();
 		setLastCommand("Enter Frame Using " + locator);
-		logger.info("Enter Frame Using " + locator);
 		webFrames.addFirst(locator);
 		locator.EnterWebFrame(this);
 		return this;
@@ -292,7 +302,6 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	{
 		setLastCommand("Open '" + url + "'");
 		validateURL(url);
-		logger.info("Open '" + url + "'");
 		driver.get(url);
 		return this;
 	}
@@ -300,7 +309,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	@Override
 	public SeleniumCommands Close()
 	{
-		logger.info("Close WebDriver");
+		setLastCommand("Close WebDriver " + driver.getCurrentUrl());
 		try
 		{
 			driver.quit();
@@ -313,8 +322,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	public SeleniumCommands PopAllWebFrames()
 	{
 		setCurrentUrl();
-		setLastCommand("PopAllWebFrames");
-		logger.info("Pop All Frames");
+		setLastCommand("Pop All Frames");
 		webFrames.clear();
 		driver.switchTo().defaultContent();
 		return this;
@@ -324,8 +332,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	public SeleniumCommands PopCurrentWebFrame()
 	{
 		setCurrentUrl();
-		setLastCommand("PopCurrentWebFrame");
-		logger.info("Pop Current Frame " + webFrames.getFirst());
+		setLastCommand("Pop Current Frame " + webFrames.getFirst());
 		if (webFrames.size() <= 1) PopAllWebFrames();
 		else
 		{
@@ -389,7 +396,6 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	{
 		setLastCommand("Open New Window " + url);
 		validateURL(url);
-		logger.info("Open New Window " + url);
 		windowBuilder = new WindowBuilder(driver, url);
 		return this;
 	}
@@ -399,11 +405,13 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	{
 		if (windowBuilder != null)
 		{
+			setLastCommand("Switch to Window");
 			windowBuilder.switchToWindow();
-			logger.info("Switch To Window: " + driver.getCurrentUrl());
+			logger.info("Controlling Window: " + driver.getCurrentUrl());
 		}
 		else
 		{
+			setLastCommand("Switch to Popup");
 			parentHandle = driver.getWindowHandle();
 			Set<String> handles = driver.getWindowHandles();
 			handles.remove(parentHandle);
@@ -415,7 +423,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 			}
 			popUpHandle = (String) handles.toArray()[0];
 			driver.switchTo().window(popUpHandle);
-			logger.info("Switch To Popup: " + driver.getCurrentUrl());
+			logger.info("Controlling Popup: " + driver.getCurrentUrl());
 		}
 
 		return this;
@@ -424,6 +432,8 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	@Override
 	public SeleniumCommands SwitchToParent()
 	{
+		setLastCommand("Switch to Parent");
+		boolean parent = false;
 		if (windowBuilder != null)
 		{
 			windowBuilder.switchToParent();
@@ -434,10 +444,14 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		}
 		else
 		{
-			logger.warn("SwitchToParent Invalid; WebDriver has control of the parent window");
+			parent = true;
+			logger.warn("SwitchToParent Invalid: WebDriver already has control of the parent window");
 		}
 
-		logger.info("Switch To Parent: " + driver.getCurrentUrl());
+		if (!parent)
+		{
+			logger.info("Controlling Parent: " + driver.getCurrentUrl());
+		}
 
 		return this;
 	}
@@ -445,20 +459,22 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	@Override
 	public SeleniumCommands CloseWindow()
 	{
+		setLastCommand("Close Window");
 		if (windowBuilder != null)
 		{
-			logger.info("Close Window");
 			windowBuilder.close();
+			logger.info("Closed Window " + windowBuilder.getWindowUrl());
 			windowBuilder = null;
 		}
 		else if (popUpHandle != null)
 		{
 			if (driver.getWindowHandle().equals(popUpHandle))
 			{
-				logger.info("Close Popup");
+				String popUpUrl = driver.getCurrentUrl();
 				driver.close();
 				popUpHandle = null;
 				driver.switchTo().window(parentHandle);
+				logger.info("Closed Popup " + popUpUrl);
 			}
 			else
 			{
@@ -540,10 +556,41 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
+	public SeleniumCommands comboBoxIndexByCSS(int index, String css)
+	{
+		WebElement element = fluentWaitForElementCss(css);
+		Select comboBox = new Select(element);
+		comboBox.selectByIndex(index);
+		return this;
+	}
+
+	@Override
 	public SeleniumCommands comboBoxRandomByCSS(String css)
 	{
 		WebElement element = fluentWaitForElementCss(css);
 		return comboBoxSelectRandom(new Select(element));
+	}
+
+	@Override
+	public int comboBoxGetDisplayIndexByCSS(String css)
+	{
+		WebElement element = fluentWaitForElementCss(css);
+		String text = comboBoxGetDisplayTextByCSS(css);
+		return getComboBoxIndexFromText(text, element);
+	}
+
+	@Override
+	public String comboBoxGetDisplayTextByCSS(String css)
+	{
+		WebElement element = fluentWaitForElementCss(css);
+		return new Select(element).getFirstSelectedOption().getText();
+	}
+
+	@Override
+	public List<WebElement> comboBoxGetOptionsByCSS(String css)
+	{
+		WebElement element = fluentWaitForElementCss(css);
+		return new Select(element).getOptions();
 	}
 
 	@Override
@@ -655,10 +702,41 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
+	public SeleniumCommands comboBoxIndexByID(int index, String id)
+	{
+		WebElement element = fluentWaitForElementId(id);
+		Select comboBox = new Select(element);
+		comboBox.selectByIndex(index);
+		return this;
+	}
+
+	@Override
 	public SeleniumCommands comboBoxRandomByID(String id)
 	{
 		WebElement element = fluentWaitForElementId(id);
 		return comboBoxSelectRandom(new Select(element));
+	}
+
+	@Override
+	public int comboBoxGetDisplayIndexByID(String id)
+	{
+		WebElement element = fluentWaitForElementId(id);
+		String text = comboBoxGetDisplayTextByID(id);
+		return getComboBoxIndexFromText(text, element);
+	}
+
+	@Override
+	public String comboBoxGetDisplayTextByID(String id)
+	{
+		WebElement element = fluentWaitForElementId(id);
+		return new Select(element).getFirstSelectedOption().getText();
+	}
+
+	@Override
+	public List<WebElement> comboBoxGetOptionsByID(String id)
+	{
+		WebElement element = fluentWaitForElementId(id);
+		return new Select(element).getOptions();
 	}
 
 	@Override
@@ -769,10 +847,41 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
+	public SeleniumCommands comboBoxIndexByXPath(int index, String xpath)
+	{
+		WebElement element = fluentWaitForElementXPath(xpath);
+		Select comboBox = new Select(element);
+		comboBox.selectByIndex(index);
+		return this;
+	}
+
+	@Override
 	public SeleniumCommands comboBoxRandomByXPath(String xpath)
 	{
 		WebElement element = fluentWaitForElementXPath(xpath);
 		return comboBoxSelectRandom(new Select(element));
+	}
+
+	@Override
+	public int comboBoxGetDisplayIndexByXPath(String xpath)
+	{
+		WebElement element = fluentWaitForElementXPath(xpath);
+		String text = comboBoxGetDisplayTextByXPath(xpath);
+		return getComboBoxIndexFromText(text, element);
+	}
+
+	@Override
+	public String comboBoxGetDisplayTextByXPath(String xpath)
+	{
+		WebElement element = fluentWaitForElementXPath(xpath);
+		return new Select(element).getFirstSelectedOption().getText();
+	}
+
+	@Override
+	public List<WebElement> comboBoxGetOptionsByXPath(String xpath)
+	{
+		WebElement element = fluentWaitForElementXPath(xpath);
+		return new Select(element).getOptions();
 	}
 
 	@Override
@@ -863,6 +972,33 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	public SeleniumCommands comboBoxRandomByWebElement(WebElement element)
 	{
 		return comboBoxSelectRandom(new Select(element));
+	}
+
+	@Override
+	public SeleniumCommands comboBoxIndexByWebElement(int index, WebElement element)
+	{
+		Select comboBox = new Select(element);
+		comboBox.selectByIndex(index);
+		return this;
+	}
+
+	@Override
+	public String comboBoxGetDisplayTextByWebElement(WebElement element)
+	{
+		return new Select(element).getFirstSelectedOption().getText();
+	}
+
+	@Override
+	public int comboBoxGetDisplayIndexByWebElement(WebElement element)
+	{
+		String text = comboBoxGetDisplayTextByWebElement(element);
+		return getComboBoxIndexFromText(text, element);
+	}
+
+	@Override
+	public List<WebElement> comboBoxGetOptionsByWebElement(WebElement element)
+	{
+		return new Select(element).getOptions();
 	}
 
 	@Override
@@ -1055,6 +1191,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	private synchronized void setLastCommand(String lastCommand)
 	{
 		this.lastCommand = lastCommand;
+		logger.info(lastCommand);
 	}
 
 	private synchronized void setCurrentUrl()
@@ -1098,5 +1235,20 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 			Close();
 			throw new IllegalArgumentException("Url '" + url + "' is invalid.");
 		}
+	}
+
+	private int getComboBoxIndexFromText(String option, WebElement select)
+	{
+		List<WebElement> options = new Select(select).getOptions();
+		for (int i=0; i < options.size(); i++)
+		{
+			if (options.get(i).getText().equals(option))
+			{
+				return i;
+			}
+		}
+		//Exception should never be thrown
+		throw new WebDriverException(
+				"Unable to find index of '" + option + "' in WebElement: " + GetElementXPath(select));
 	}
 }

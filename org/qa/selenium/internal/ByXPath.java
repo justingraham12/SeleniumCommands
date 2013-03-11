@@ -45,6 +45,14 @@ public interface ByXPath
 
 	SeleniumCommands comboBoxRandomByXPath(String xpath);
 
+	SeleniumCommands comboBoxIndexByXPath(int index, String xpath);
+
+	String comboBoxGetDisplayTextByXPath(String xpath);
+
+	int comboBoxGetDisplayIndexByXPath(String xpath);
+
+	List<WebElement> comboBoxGetOptionsByXPath(String xpath);
+
 	/**
 	 * Runs a {@link org.openqa.selenium.support.ui.FluentWait} for the element at the supplied XPath. This
 	 * causes our {@link org.openqa.selenium.WebDriver} to pause until the element is found.

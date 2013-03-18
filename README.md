@@ -151,16 +151,142 @@ Current Functions:
 ```
 
 
-####SeleniumCommands In Use:
+##SeleniumCommands vs Default Selenium2 (WebDriver):
+
+####Selenium2 (WebDriver) using TestNG
 
 ```java
-/* SeleniumCommands */
-SeleniumCommands commands = new Commands(new FirefoxDriver())
-  .Open("http://www.github.com")
-  .Click(Using.CSS(".search>a"))
-  .Type("SeleniumCommands", Using.XPath("//*[@name='q']"))
-  .Click(Using.XPath("//*[@type='submit']"))
-  .Click(Using.XPath("//a[contains(text(), 'SeleniumCommands')]"))
-  .WaitForTime(5, TimeUnit.SECONDS)
-  .Close();
+
+/**
+ * This class shows how we could set up a very simple unit test using the default Selenium WebDriver
+ */
+@Test
+public class TestWithoutSeleniumCommands
+{
+  /* Hold the driver controlling the browser */
+  private WebDriver driver;
+  
+  /* Assign the Firefox browser to our driver */
+  @BeforeClass
+  public void startWebDriver()
+  {
+    driver = new FirefoxDriver());
+  }
+
+  /* 
+   * This is where the bulk of the changes are made. On every line we are required to 
+   * make a new call to the driver and to find the WebElement we would like to interact with.
+   * Notice here we are not including any wait's as described above. If any of the 
+   * WebElements are populated using ajax the test will fail with a NoSuchElementException.
+   */
+  @Test (description="Simple test using Selenium WebDriver and TestNG")
+  public void testSeleniumWebDriver()
+  {
+    driver.get("http://www.github.com");
+    driver.findElement(By.cssSelector(".search>a")).click();
+    driver.findElement(By.xpath("//*[@name='q']")).sendKeys("SeleniumCommands");
+    driver.findElement(By.xpath("//*[@type='submit']")).click();
+    driver.findElement(By.cssSelector("span.mega-icon.mega-icon-public-repo + a")).click();
+
+    //When we hit the final page we would like the Driver to pause for 5 seconds before closing
+    long waitFor = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(5);
+    while (System.currentTimeMillis() < waitFor){}
+  }
+  
+  /*
+   * If the test passes or fails we always want to quit the driver.  
+   */
+  @AfterClass
+  public void closeSeleniumCommands()
+  {
+    driver.quit();
+  }
+}
 ```
+
+####SeleniumCommands using TestNG
+
+```java
+
+/**
+ * Now lets build the same unit test but this time using the SeleniumCommands project 
+ */
+public class TestWithSeleniumCommands
+{
+  /* Our SeleniumCommands object that will run our tests */
+  private SeleniumCommands commands;
+  
+  /* Give SeleniumCommands our Firefox WebDriver */
+  @BeforeClass
+  public void startSeleniumCommands()
+  {
+    commands = new Commands(new FirefoxDriver());
+  }
+
+  /*
+   * The first thing you should notice is the simplictiy in which we call our commands.
+   * We have no need of calling the WebDriver because we already gave it to SeleniumCommands.
+   * We also do not need to findElements before calling our command. We need to pass the correct
+   * locator to the element and use the correct command... thats it! SeleniumCommands will wait for
+   * the element to appear on the page and perform the correct command all on it's own.
+   */
+  @Test (description="Simple test using SeleniumCommands and TestNG")
+  public void testSeleniumCommands()
+  {
+    commands
+      .Open("http://www.github.com")
+      .Click(Using.CSS(".search>a")) 
+      .Type("SeleniumCommands", Using.XPath("//*[@name='q']"))
+      .Click(Using.XPath("//*[@type='submit']"))
+      .Click(Using.CSS("span.mega-icon.mega-icon-public-repo + a"))
+      .WaitForTime(5, TimeUnit.SECONDS);
+  }
+  
+  /* Close selenium once the test completes */
+  @AfterClass
+  public void closeSeleniumCommands()
+  {
+    commands.Close();
+  }
+}
+```
+
+####Results of running both unit tests 5x's:
+
+<table>
+  <tr>
+    <th>Pass</th>
+    <th>SeleniumCommands</th>
+    <th>Default Selenium</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>Pass</td>
+    <td>Fail (NoSuchElementException: Unable to locate element: "//*[@name='q']")</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Pass</td>
+    <td>Fail (NoSuchElementException: Unable to locate element: "//*[@name='q']")</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>Pass</td>
+    <td>Pass</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>Pass</td>
+    <td>Fail (NoSuchElementException: Unable to locate element: "//*[@name='q']")</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>Pass</td>
+    <td>Pass</td>
+  </tr>
+  <tr>
+    <th>Results</th>
+    <td>100% Pass</td>
+    <td>40% Pass, 60% Fail</td>
+  </tr>
+</table>

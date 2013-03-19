@@ -407,7 +407,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		{
 			setLastCommand("Switch to Window");
 			windowBuilder.switchToWindow();
-			logger.info("Controlling Window: " + driver.getCurrentUrl());
+			logger.debug("Controlling Window: " + driver.getCurrentUrl());
 		}
 		else
 		{
@@ -423,7 +423,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 			}
 			popUpHandle = (String) handles.toArray()[0];
 			driver.switchTo().window(popUpHandle);
-			logger.info("Controlling Popup: " + driver.getCurrentUrl());
+			logger.debug("Controlling Popup: " + driver.getCurrentUrl());
 		}
 
 		return this;
@@ -450,7 +450,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 
 		if (!parent)
 		{
-			logger.info("Controlling Parent: " + driver.getCurrentUrl());
+			logger.debug("Controlling Parent: " + driver.getCurrentUrl());
 		}
 
 		return this;
@@ -463,7 +463,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		if (windowBuilder != null)
 		{
 			windowBuilder.close();
-			logger.info("Closed Window " + windowBuilder.getWindowUrl());
+			logger.debug("Closed Window " + windowBuilder.getWindowUrl());
 			windowBuilder = null;
 		}
 		else if (popUpHandle != null)
@@ -474,7 +474,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 				driver.close();
 				popUpHandle = null;
 				driver.switchTo().window(parentHandle);
-				logger.info("Closed Popup " + popUpUrl);
+				logger.debug("Closed Popup " + popUpUrl);
 			}
 			else
 			{
@@ -1191,7 +1191,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	private synchronized void setLastCommand(String lastCommand)
 	{
 		this.lastCommand = lastCommand;
-		logger.info(lastCommand);
+		logger.debug(lastCommand);
 	}
 
 	private synchronized void setCurrentUrl()

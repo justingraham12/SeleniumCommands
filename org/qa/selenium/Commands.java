@@ -75,87 +75,87 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	 *===================================================================*/
 
 	@Override
-	public SeleniumCommands Click(Using locator)
+	public SeleniumCommands click(Using locator)
 	{
 		setCurrentUrl();
-		setLastCommand("Click Using " + locator);
+		setLastCommand("click Using " + locator);
 		locator.Click(this);
 		return this;
 	}
 
 	@Override
-	public SeleniumCommands Click(Using locator, String linkName)
+	public SeleniumCommands click(Using locator, String linkName)
 	{
 		setCurrentUrl();
-		setLastCommand("Click '" + linkName + "' Using " + locator);
+		setLastCommand("click '" + linkName + "' Using " + locator);
 		locator.Click(this);
 		return this;
 	}
 
 	@Override
-	public SeleniumCommands ClickRandom(Using locator, String linkName)
+	public SeleniumCommands clickRandom(Using locator, String linkName)
 	{
 		setCurrentUrl();
-		setLastCommand("Click Random '" + linkName + "' Using " + locator);
+		setLastCommand("click Random '" + linkName + "' Using " + locator);
 		locator.ClickRandom(this);
 		return this;
 	}
 
 	@Override
-	public SeleniumCommands ClickRandom(Using locator)
+	public SeleniumCommands clickRandom(Using locator)
 	{
 		setCurrentUrl();
-		setLastCommand("Click Random Using " + locator);
+		setLastCommand("click Random Using " + locator);
 		locator.ClickRandom(this);
 		return this;
 	}
 
 	@Override
-	public SeleniumCommands CheckBox(boolean selected, Using locator)
+	public SeleniumCommands checkBox(boolean selected, Using locator)
 	{
 		setCurrentUrl();
 		String option = (selected) ? "check" : "un-check";
-		setLastCommand("CheckBox '" + option + "' Using " + locator);
+		setLastCommand("checkBox '" + option + "' Using " + locator);
 		locator.CheckBox(selected, this);
 		return this;
 	}
 
 	@Override
-	public WebElement GetElement(Using locator)
+	public WebElement getElement(Using locator)
 	{
 		setCurrentUrl();
-		setLastCommand("GetElement Using " + locator);
+		setLastCommand("getElement Using " + locator);
 		return locator.GetElement(this);
 	}
 
 	@Override
-	public int GetElementCount(Using locator)
+	public int getElementCount(Using locator)
 	{
 		setCurrentUrl();
-		setLastCommand("GetElementCount Using " + locator);
+		setLastCommand("getElementCount Using " + locator);
 		return locator.GetElementCount(this);
 	}
 
 	@Override
-	public SeleniumCommands Type(String input, Using locator)
+	public SeleniumCommands type(String input, Using locator)
 	{
 		setCurrentUrl();
-		setLastCommand("Type '" + input + "' Using " + locator);
+		setLastCommand("type '" + input + "' Using " + locator);
 		locator.Type(input, this);
 		return this;
 	}
 
 	@Override
-	public SeleniumCommands Type(String input, Using locator, String inputName)
+	public SeleniumCommands type(String input, Using locator, String inputName)
 	{
 		setCurrentUrl();
-		setLastCommand("Type '" + input + "' into " + inputName + " Using " + locator);
+		setLastCommand("type '" + input + "' into " + inputName + " Using " + locator);
 		locator.Type(input, this);
 		return this;
 	}
 
 	@Override
-	public SeleniumCommands ComboBoxByText(String visibleText, Using locator)
+	public SeleniumCommands comboBoxByText(String visibleText, Using locator)
 	{
 		setCurrentUrl();
 		setLastCommand("Select '" + visibleText + "' Using " + locator);
@@ -164,7 +164,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public SeleniumCommands ComboBoxByIndex(int index, Using locator)
+	public SeleniumCommands comboBoxByIndex(int index, Using locator)
 	{
 		setCurrentUrl();
 		setLastCommand("Select index '" + index + "' Using " + locator);
@@ -173,9 +173,9 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public SeleniumCommands ComboBoxByText(
-			String visibleText, Using locator, String comboBoxName
-	)
+	public SeleniumCommands comboBoxByText(
+            String visibleText, Using locator, String comboBoxName
+    )
 	{
 		setCurrentUrl();
 		setLastCommand("Select '" + visibleText + "' from '" + comboBoxName + "' Using " + locator);
@@ -184,7 +184,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public String ComboBoxGetDisplayText(Using locator)
+	public String comboBoxGetDisplayText(Using locator)
 	{
 		setCurrentUrl();
 		setLastCommand("ComboBox get display text Using " + locator);
@@ -192,7 +192,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public int ComboBoxGetDisplayIndex(Using locator)
+	public int comboBoxGetDisplayIndex(Using locator)
 	{
 		setCurrentUrl();
 		setLastCommand("ComboBox get display index Using " + locator);
@@ -200,7 +200,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public SeleniumCommands ComboBoxRandom(Using locator)
+	public SeleniumCommands comboBoxRandom(Using locator)
 	{
 		setCurrentUrl();
 		setLastCommand("Select Random Using " + locator);
@@ -209,7 +209,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public List<WebElement> ComboBoxGetOptions(Using locator)
+	public List<WebElement> comboBoxGetOptions(Using locator)
 	{
 		setCurrentUrl();
 		setLastCommand("Get ComboBox Options Using " + locator);
@@ -217,7 +217,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public SeleniumCommands WaitForElement(Using locator)
+	public SeleniumCommands waitForElement(Using locator)
 	{
 		setCurrentUrl();
 		setLastCommand("Wait for WebElement Using " + locator);
@@ -226,7 +226,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public SeleniumCommands WaitForElement(Using locator, String elementName)
+	public SeleniumCommands waitForElement(Using locator, String elementName)
 	{
 		setCurrentUrl();
 		setLastCommand("Wait for WebElement '" + elementName + "' Using " + locator);
@@ -235,31 +235,31 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public List<WebElement> GetElements(Using locator)
+	public List<WebElement> getElements(Using locator)
 	{
 		setCurrentUrl();
-		setLastCommand("GetElements Using " + locator);
+		setLastCommand("getElements Using " + locator);
 		return locator.GetElements(this);
 	}
 
 	@Override
-	public String GetElementAttribute(String attribute, Using locator)
+	public String getElementAttribute(String attribute, Using locator)
 	{
 		setCurrentUrl();
-		setLastCommand("GetElementAttribute '" + attribute + "' Using " + locator);
+		setLastCommand("getElementAttribute '" + attribute + "' Using " + locator);
 		return locator.GetElementAttribute(attribute, this);
 	}
 
 	@Override
-	public String GetText(Using locator)
+	public String getText(Using locator)
 	{
 		setCurrentUrl();
-		setLastCommand("GetText Using " + locator);
+		setLastCommand("getText Using " + locator);
 		return locator.GetText(this);
 	}
 
 	@Override
-	public SeleniumCommands EnterWebFrame(Using locator)
+	public SeleniumCommands enterWebFrame(Using locator)
 	{
 		setCurrentUrl();
 		setLastCommand("Enter Frame Using " + locator);
@@ -269,9 +269,9 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public SeleniumCommands SetFluentWaitTime(
-			Integer waitTime, TimeUnit waitUnit, Integer pollingTime, TimeUnit pollingUnit
-	)
+	public SeleniumCommands setFluentWaitTime(
+            Integer waitTime, TimeUnit waitUnit, Integer pollingTime, TimeUnit pollingUnit
+    )
 	{
 		waitTime = (waitTime == null || waitTime < 0) ? 0 : waitTime;
 		pollingTime = (pollingTime == null || pollingTime < 0) ? 0 : pollingTime;
@@ -288,7 +288,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public SeleniumCommands WaitForTime(long time, TimeUnit unit)
+	public SeleniumCommands waitForTime(long time, TimeUnit unit)
 	{
 		if (time <= 0) throw new IllegalArgumentException("Wait time must be positive and greater than 0");
 		long waitUntil = System.currentTimeMillis() + unit.toMillis(time);
@@ -298,18 +298,18 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public SeleniumCommands Open(String url)
+	public SeleniumCommands open(String url)
 	{
-		setLastCommand("Open '" + url + "'");
+		setLastCommand("open '" + url + "'");
 		validateURL(url);
 		driver.get(url);
 		return this;
 	}
 
 	@Override
-	public SeleniumCommands Close()
+	public SeleniumCommands close()
 	{
-		setLastCommand("Close WebDriver " + driver.getCurrentUrl());
+		setLastCommand("close WebDriver " + driver.getCurrentUrl());
 		try
 		{
 			driver.quit();
@@ -319,7 +319,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public SeleniumCommands PopAllWebFrames()
+	public SeleniumCommands popAllWebFrames()
 	{
 		setCurrentUrl();
 		setLastCommand("Pop All Frames");
@@ -329,11 +329,11 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public SeleniumCommands PopCurrentWebFrame()
+	public SeleniumCommands popCurrentWebFrame()
 	{
 		setCurrentUrl();
 		setLastCommand("Pop Current Frame " + webFrames.getFirst());
-		if (webFrames.size() <= 1) PopAllWebFrames();
+		if (webFrames.size() <= 1) popAllWebFrames();
 		else
 		{
 			//switch to default webFrame
@@ -352,9 +352,9 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public String GetElementXPath(WebElement element)
+	public String getElementXPath(WebElement element)
 	{
-		setLastCommand("GetElementXPath");
+		setLastCommand("getElementXPath");
 		return (String) ((JavascriptExecutor) driver).executeScript(
 				"getXPath=function(node)" +
 						"{" +
@@ -392,16 +392,16 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public SeleniumCommands OpenNewWindow(String url)
+	public SeleniumCommands openNewWindow(String url)
 	{
-		setLastCommand("Open New Window " + url);
+		setLastCommand("open New Window " + url);
 		validateURL(url);
 		windowBuilder = new WindowBuilder(driver, url);
 		return this;
 	}
 
 	@Override
-	public SeleniumCommands SwitchToWindow()
+	public SeleniumCommands switchToWindow()
 	{
 		if (windowBuilder != null)
 		{
@@ -430,7 +430,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public SeleniumCommands SwitchToParent()
+	public SeleniumCommands switchToParent()
 	{
 		setLastCommand("Switch to Parent");
 		boolean parent = false;
@@ -445,7 +445,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		else
 		{
 			parent = true;
-			logger.warn("SwitchToParent Invalid: WebDriver already has control of the parent window");
+			logger.warn("switchToParent Invalid: WebDriver already has control of the parent window");
 		}
 
 		if (!parent)
@@ -457,9 +457,9 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	}
 
 	@Override
-	public SeleniumCommands CloseWindow()
+	public SeleniumCommands closeWindow()
 	{
-		setLastCommand("Close Window");
+		setLastCommand("close Window");
 		if (windowBuilder != null)
 		{
 			windowBuilder.close();
@@ -478,7 +478,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 			}
 			else
 			{
-				logger.warn("CloseWindow Invalid; WebDriver has control of the parent window");
+				logger.warn("closeWindow Invalid; WebDriver has control of the parent window");
 			}
 		}
 
@@ -1004,7 +1004,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 	@Override
 	public SeleniumCommands waitForWebElement(WebElement element)
 	{
-		fluentWaitForElementXPath(GetElementXPath(element));
+		fluentWaitForElementXPath(getElementXPath(element));
 		return this;
 	}
 
@@ -1232,7 +1232,7 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		if (url == null) throw new NullPointerException("URL must not be Null");
 		UrlValidator validate = new UrlValidator(new String[]{"http", "https"});
 		if (!validate.isValid(url)) {
-			Close();
+			close();
 			throw new IllegalArgumentException("Url '" + url + "' is invalid.");
 		}
 	}
@@ -1249,6 +1249,6 @@ public class Commands implements SeleniumCommands, ByXPath, ByCSS, ByID, ByWebEl
 		}
 		//Exception should never be thrown
 		throw new WebDriverException(
-				"Unable to find index of '" + option + "' in WebElement: " + GetElementXPath(select));
+				"Unable to find index of '" + option + "' in WebElement: " + getElementXPath(select));
 	}
 }

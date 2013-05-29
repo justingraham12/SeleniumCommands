@@ -105,7 +105,7 @@ public class WindowBuilder
 						injectAnchorTag(name, url)
 				);
 
-		//Click on the anchor element
+		//click on the anchor element
 		driver.findElement(By.id(name)).click();
 
 		handle = getNewHandle(oldHandles);
